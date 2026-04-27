@@ -30,6 +30,8 @@ woche(X,Y):- tag(X),stunde(Y).
 
 
 X{allokation(K,R,F,T,S):raum(R), woche(T,S)}X:- lehrplan(K, F, X).
-falsch:- klasse(K), allokration(K,R,F,T,S), 
+invalid(("doppelter raum", R, T, S)) :- allokation(K1, R, F1, T, S), allokation(K2, R, F2, T, S), K1 != K2.
+:- invalid(_).
 #show allokation/5.
+
 
