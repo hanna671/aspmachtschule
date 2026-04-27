@@ -45,9 +45,10 @@ costs = []
 modelAtomTemplates = [    
         {'name':'movePerson','filter':lambda s: s.name=='movePerson', 'columns':['name']},
     {'name':'currentRoom','filter':lambda s: s.name=='currentRoom', 'columns':['name','room']},
-    {'name':'allocation', 'filter':lambda s: s.name=='allocation', 'columns':['name','room']},
+    {'name':'allokation', 'filter':lambda s: s.name=='allokation', 'columns':['klasse','raum','fach', 'tag', 'stunde']},
     {'name':'sameRoomSameProject', 'filter':lambda s: s.name=='sameRoomSameProject', 'columns':['name1','name2']},
-    {'name':'teacher', 'filter':lambda s: s.name=='teacher', 'columns':['name','subject']}
+    {'name':'dist', 'filter':lambda s: s.name=='dist', 'columns':['start','ende','dist']},
+    {'name':'invalid', 'filter':lambda s: s.name=='invalid', 'columns':['name']}
 ]
 
 def cprint(Text):
@@ -57,35 +58,7 @@ def cprint(Text):
 
 def compute_costs(modelIndex, all_data_frames):
     global outputfolder
-
-    current_allocation_df = all_data_frames["currentRoom"]
-    current_allocation_df_dict_org = dict(zip(current_allocation_df['name'].values, current_allocation_df['room'].values))
-    current_allocation_dict = {k.name:current_allocation_df_dict_org.get(k).name for k in current_allocation_df_dict_org}
-
-    new_allocation_df = all_data_frames["allocation"]
-    new_allocation_df_dict_org = dict(zip(new_allocation_df['name'].values, new_allocation_df['room'].values))
-    new_allocation_dict = {k.name:new_allocation_df_dict_org.get(k).name for k in new_allocation_df_dict_org}
-
-    sameRoomSameProject_df = all_data_frames["sameRoomSameProject"]
-    sameRoomSameProject_dict_org = dict(zip(sameRoomSameProject_df['name1'].values, sameRoomSameProject_df['name2']))
-    sameRoomSameProject_dict = {k.name:sameRoomSameProject_dict_org.get(k).name for k in sameRoomSameProject_dict_org}
-
-
-    movePerson_df = all_data_frames["movePerson"]
-    movePerson_list = list(movePerson_df['name'].values)
-    sameRoomSameProject_dict = {k.name:sameRoomSameProject_dict_org.get(k).name for k in sameRoomSameProject_dict_org}
-
-    nr_of_no_realloc = len(movePerson_list) #sum(1 for key in current_allocation_dict if current_allocation_dict[key] == new_allocation_dict[key])
-    same_room_same_project = len(sameRoomSameProject_dict)
-
-    print("calculating cost ...")
-    #print(movePerson_list)
-    #print(nr_of_no_realloc)
-    thisCost = {"model_id": modelIndex,"same_room_same_project":same_room_same_project, "nr_of_realloc":nr_of_no_realloc}
-    costs.append(thisCost)
-    cost_df = pd.DataFrame(data=costs, columns=['model_id','same_room_same_project', 'nr_of_realloc'])
-    cost_df.set_index("model_id", inplace=True)
-    cost_df.to_csv(f"{outputfolder}/costs.csv")
+    return True
 
     
 def get_programs_by_categories(categories: list[str]):
