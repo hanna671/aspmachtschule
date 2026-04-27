@@ -1,10 +1,10 @@
 [
-{   "program_folder": "logic-programs/room-allocation",
+{   "program_folder": "logic-programs/aspforschool",
     "timeout": 3600,
     "max_nr_models": 10,
     "show_model": true,
     "show_dataframes": true,
-    "all_results_folder": "output-min-reallocation",
+    "all_results_folder": "output",
     "timestamp_on_results_folder": false,
     "example": false,
     "output_hundredth_model": false,

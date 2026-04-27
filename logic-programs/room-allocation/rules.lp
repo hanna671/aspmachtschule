@@ -1,6 +1,10 @@
+staff(hanna;emma). 
+room(a110,4).
+
 % everyone needs to be assigned to exactly one room
 1{allocation(Person,Room):room(Room,_)}1 :- staff(Person).
-1{allocation(Person,Room):room(Room,_)}1 :- student(Person).
+
+#show staff/1.
 
 % there cannot be more persons allocated to a room than the number of places (size) of that room
 :- room(Room,Size), Size<#count{Person:allocation(Person,Room)}.

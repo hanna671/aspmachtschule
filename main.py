@@ -6,7 +6,7 @@ import clingo
 from clingo.control import Control
 from clingo.backend import Observer
 import matplotlib
-matplotlib.use('Agg') 
+#matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 import pandas as pd
 import networkx as nx
@@ -29,7 +29,7 @@ import pickle
 
 #import create_best_model_dataframe
 
-matplotlib.use('TkAgg')
+#matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 YELLOW = "\033[33m"
@@ -46,7 +46,8 @@ modelAtomTemplates = [
         {'name':'movePerson','filter':lambda s: s.name=='movePerson', 'columns':['name']},
     {'name':'currentRoom','filter':lambda s: s.name=='currentRoom', 'columns':['name','room']},
     {'name':'allocation', 'filter':lambda s: s.name=='allocation', 'columns':['name','room']},
-    {'name':'sameRoomSameProject', 'filter':lambda s: s.name=='sameRoomSameProject', 'columns':['name1','name2']}
+    {'name':'sameRoomSameProject', 'filter':lambda s: s.name=='sameRoomSameProject', 'columns':['name1','name2']},
+    {'name':'teacher', 'filter':lambda s: s.name=='teacher', 'columns':['name','subject']}
 ]
 
 def cprint(Text):
