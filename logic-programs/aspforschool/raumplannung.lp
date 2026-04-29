@@ -52,7 +52,7 @@ vollstaendigedistlehrer(L,V):- #sum{D,T,S: wegkostenlehrer(L,D,T,S)}=V ,lehrer(L
 %vielleicht noch summe von blöcken bilden,oder vielleicht zählen?: 
 sumblock(B):- #sum{S,F,S1,T,K,L: block(F,S,S1,T,K,L)}=B.
 %sumblock(F,S,S1,T,K,L,):- #count{S,S1,F,T,K,L: block(F,S,S1,T,K,L)}.
-%#maximize{B: sumblock(B)}.
+#maximize{B: sumblock(B)}.
 %#maximize{S,F,S1,T,K,L:sumblock(F,S,S1,T,K,L)}.
 %nur maximal 2mal das gleiche fach
 :-block(F,S,S1,T,K,L), block(F,S1,S2,T,K,L), S+2=S1+1=S2.

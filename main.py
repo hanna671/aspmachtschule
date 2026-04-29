@@ -9,12 +9,10 @@ import matplotlib
 #matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 import pandas as pd
-import networkx as nx
 from datetime import datetime
 import threading
 import sys
 import plotly.express as px
-import seaborn as sns
 import helper_functions as hf
 
 import os
@@ -50,7 +48,8 @@ modelAtomTemplates = [
     {'name':'dist', 'filter':lambda s: s.name=='dist', 'columns':['start','ende','dist']},
     {'name':'wegkosten', 'filter':lambda s: s.name== 'wegkosten', 'columns':['klasse', 'dist','tag', 'stunde']},
     {'name':'invalid', 'filter':lambda s: s.name=='invalid', 'columns':['name']},
-    {'name':'wegkostenlehrer', 'filter':lambda s: s.name== 'wegkostenlehrer', 'columns':['lehrer', 'dist','tag', 'stunde']}
+    {'name':'wegkostenlehrer', 'filter':lambda s: s.name== 'wegkostenlehrer', 'columns':['lehrer', 'dist','tag', 'stunde']},
+    {'name':'sumblock', 'filter':lambda s: s.name=='sumblock', 'columns':['anzahl']}
 
 ]
 
@@ -59,8 +58,48 @@ def cprint(Text):
     if print_details:
         print(Text)
 
+
+def extract_clingo_number(val):
+    # Case A: It's a Clingo Symbol (has .number attribute)
+    if hasattr(val, 'number'):  
+        return val.number
+    # Case B: It's already a Python int or float
+    if isinstance(val, (int, float)):
+        return val
+    # Case C: It's a string that looks like a number ("6")
+    try:
+        return float(val)
+    except (ValueError, TypeError):
+        return 0  # Default fallback if data is bad
+        
+
 def compute_costs(modelIndex, all_data_frames):
+
     global outputfolder
+
+    cprint("calculating cost ...")
+    cost = {}
+
+    wegkosten_df = all_data_frames["wegkosten"]
+    wegkosten_df['dist'] = wegkosten_df['dist'].apply(extract_clingo_number)
+    cost["wegkosten"] = sum(wegkosten_df['dist'])
+
+    wegkostenlehrer_df = all_data_frames["wegkostenlehrer"]
+    wegkostenlehrer_df['dist'] = wegkostenlehrer_df['dist'].apply(extract_clingo_number)
+    cost["wegkostenlehrer"] = sum(wegkostenlehrer_df['dist'])
+
+    sumblock_df = all_data_frames["sumblock"]
+    sumblock_df['anzahl'] = sumblock_df['anzahl'].apply(extract_clingo_number)
+    cost["sumblock"] = sum(sumblock_df['anzahl'])
+
+    cost['model_id'] = modelIndex
+    
+    costs.append(cost)
+
+    cost_df = pd.DataFrame(data=costs, columns=["model_id","wegkosten","wegkostenlehrer","sumblock"])
+    cost_df.set_index("model_id", inplace=False)
+    cost_df.to_csv(f"{outputfolder}/costs.csv")
+
     return True
 
     
