@@ -114,7 +114,7 @@ def get_programs_by_categories(categories: list[str]):
             print(f"Folder or file \'{category}\' does not exist.")
     return programs
 
-def solve_clingo(programs, max_models=1):
+def solve_clingo(programs, max_models=1, timeout=None):
     global start_time_solving, produced_at_atoms, ctl
     print('Configuring Clingo ...')
     print(f'--models={max_models}')
@@ -134,9 +134,18 @@ def solve_clingo(programs, max_models=1):
 
     start_time_solving = time.process_time()
 
-    res = ctl.solve(on_model=on_model)
+
+
+    if timeout is None:
+        res = ctl.solve(on_model=on_model)
+    else:
+        with ctl.solve(on_model=on_model, async_=True) as handle:
+            finished = handle.wait(timeout)
+            if not finished:
+                print(f"Time limit of {timeout}s reached.")
+                handle.cancel()
     ctl.cleanup()
-    return res
+    return True
 
 
 def processModel(m, modelIndex):
@@ -284,7 +293,7 @@ def run_asp():
     gc.collect()  
     print(f"{YELLOW}============================== {categories} =============================={RESET}") 
     outputfolder = f'{all_results_folder}'
-    solve_clingo(get_programs_by_categories(categories), max_nr_models)
+    solve_clingo(get_programs_by_categories(categories), max_nr_models, timeout)
     #gc.collect()  
 if __name__ == "__main__":
     myobs = hf.MyObserver()
