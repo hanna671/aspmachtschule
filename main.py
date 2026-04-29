@@ -45,10 +45,13 @@ costs = []
 modelAtomTemplates = [    
         {'name':'movePerson','filter':lambda s: s.name=='movePerson', 'columns':['name']},
     {'name':'currentRoom','filter':lambda s: s.name=='currentRoom', 'columns':['name','room']},
-    {'name':'allokation', 'filter':lambda s: s.name=='allokation', 'columns':['klasse','raum','fach', 'tag', 'stunde']},
+    {'name':'allokation', 'filter':lambda s: s.name=='allokation', 'columns':['klasse','raum','fach', 'tag', 'stunde','lehrer']},
     {'name':'sameRoomSameProject', 'filter':lambda s: s.name=='sameRoomSameProject', 'columns':['name1','name2']},
     {'name':'dist', 'filter':lambda s: s.name=='dist', 'columns':['start','ende','dist']},
-    {'name':'invalid', 'filter':lambda s: s.name=='invalid', 'columns':['name']}
+    {'name':'wegkosten', 'filter':lambda s: s.name== 'wegkosten', 'columns':['klasse', 'dist','tag', 'stunde']},
+    {'name':'invalid', 'filter':lambda s: s.name=='invalid', 'columns':['name']},
+    {'name':'wegkostenlehrer', 'filter':lambda s: s.name== 'wegkostenlehrer', 'columns':['lehrer', 'dist','tag', 'stunde']}
+
 ]
 
 def cprint(Text):

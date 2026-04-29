@@ -21,7 +21,7 @@ lehrplan(3, de, 1).
 lehrplan(3, eth, 3).
 invalid(X):- lehrplan(X,_,_),not klasse(X).
 invalid(Y):- lehrplan(_,Y,_) ,not fach(Y).
-tag(mo;di;mi).
+tag(mo;di;mi;do;fr).
 %;do;fr).
 stunde(1..6). 
 woche(X,Y):- tag(X),stunde(Y).
@@ -37,17 +37,29 @@ vollstaendigedist(K,G):- #sum{ D ,T, S : wegkosten(K, D, T, S)}= G, klasse(K).
 :- allokation(K, R1, F1, T, S, L1), allokation(K, R, F, T, S, L), L1!=L, lehrer(L,F), klasse(K).
 #minimize{G,K:vollstaendigedist(K,G)}.
 
-lehrer(1,ma).
-lehrer(2,de).
-lehrer(3,ge).
-lehrer(4,eth).
-lehrer(5,sp).
+lehrer(mann,ma).
+lehrer(wolf,de).
+lehrer(ferme,ge).
+lehrer(bergmann,eth).
+lehrer(kalauch,sp).
 
-wegkostenl(L,D,T,S):- allokation(K,R1,F1,T,S1,L1), allokation(K,R,F,T,D,L), dist(R1,R,D), S1=S+1, stunde(S1), klasse(K), lehrer(L,F).
+wegkostenlehrer(L,D,T,S):- allokation(K,R1,F1,T,S1,L1), allokation(K,R,F,T,S,L), dist(R1,R,D), S1=S+1, stunde(S1), klasse(K), lehrer(L,F).
+vollstaendigedistlehrer(L,V):- #sum{D,T,S: wegkostenlehrer(L,D,T,S)}=V ,lehrer(L,F).
+#minimize{V,L: vollstaendigedistlehrer(L,V)}.
 
-
+% ein block ist 2 stunden vom gleichen fach hintereinnander, vielleicht so: 
+ block(F,S,S1,T,K,L):- allokation(K, R, F, T, S ,L), allokation(K, R, F, T, S1, L), S1=S+1, S1!=6.
+%vielleicht noch summe von blöcken bilden,oder vielleicht zählen?: 
+sumblock(B):- #sum{S,F,S1,T,K,L: block(F,S,S1,T,K,L)}=B.
+%sumblock(F,S,S1,T,K,L,):- #count{S,S1,F,T,K,L: block(F,S,S1,T,K,L)}.
+%#maximize{B: sumblock(B)}.
+%#maximize{S,F,S1,T,K,L:sumblock(F,S,S1,T,K,L)}.
+%nur maximal 2mal das gleiche fach
+:-block(F,S,S1,T,K,L), block(F,S1,S2,T,K,L), S+2=S1+1=S2.
+%homeoffice:
+:- lehrer(L, F), #count{ T, S : allokation(K, R, F, T, S, L) } > 4.
 
 
 %#show allokation/5.
-%#show vollstaendigedist/1.
+%#show vollstaendigedist/2.
 %#show wegkosten/4.
