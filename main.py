@@ -114,7 +114,7 @@ def get_programs_by_categories(categories: list[str]):
             print(f"Folder or file \'{category}\' does not exist.")
     return programs
 
-def solve_clingo(programs, max_models=1, timeout=None):
+def solve_clingo(programs, max_models=0, timeout=None):
     global start_time_solving, produced_at_atoms, ctl
     print('Configuring Clingo ...')
     print(f'--models={max_models}')

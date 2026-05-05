@@ -44,6 +44,9 @@ raum(46,1,1,4).
 raum(47,2,1,4).
 raum(48,3,1,4).
 
+raumFach(48, bio). 
+raumFach(N,en) :- fach(en), raum(N,_,_,_), N!=48, N!=32.
+
 dist_x(R,R1,DX):- X-X1=DX, X>=X1, raum(R,X,_,_), raum(R1,X1,_,_).
 dist_x(R,R1,DX):- X1-X=DX, X<X1, raum(R,X,_,_), raum(R1,X1,_,_).
 
@@ -113,8 +116,6 @@ lehrplan(10,b,fr,3).
 lehrplan(10,c,fr,3).
 lehrplan(10,d,spa,3).
 
-
-
 invalid(X):- lehrplan(X,M,_,_),not klasse(X,M).
 invalid(Y):- lehrplan(_,_,Y,_) ,not fach(Y).
 %tag(mo;di;mi;do;fr).
@@ -136,16 +137,32 @@ fehlender_lehrer_helfer(F):- lehrer(L,F).
 %allokation(K, M, R, F, T, S, L) :- klasse_fach_lehrer(K, M, F, L), klasse_zeitpunkt_raum(K, M, T, S, R), klasse_zeitpunkt_fach(K, M, T, S, F).
 
 % Grounding dauert zu lange:
-%{allokation(K,R,F,T,S,L):lehrer(L,F), raum(R,_,_,_), woche(T,S)}X:- lehrplan(K,M, F, X).
-%invalid(("doppelter raum", R, T, S)) :- allokation(K1, R, F1, T, S, L), allokation(K2, R, F2, T, S, L), K1 != K2, lehrer(L,F).
+% K: klasse, M: Gruppe in Klasse, R: Raum, F: Fach, T: Tag, S:Stunde, L: Lehrer
+
+lehrplanX(K,F,X) :- lehrplan(K,_,F,X), klasse(K, M).
+1{allokation(K,R,F,T,S,L):lehrer(L,F), raum(R,_,_,_), woche(T,S)}1:- lehrplanX(K, F, X), X=1.
+2{allokation(K,R,F,T,S,L):lehrer(L,F), raum(R,_,_,_), woche(T,S)}2:- lehrplanX(K, F, X), X=2.
+%3{allokation(K,R,F,T,S,L):lehrer(L,F), raum(R,_,_,_), woche(T,S)}3:- lehrplanX(K, F, X), X=3.
+%4{allokation(K,R,F,T,S,L):lehrer(L,F), raum(R,_,_,_), woche(T,S)}4:- lehrplanX(K, F, X), X=3.
+
+wegkosten(K, D, T, S):- allokation(K, R1, F1, T, S1, L1), allokation(K, R, F, T, S, L), dist(R1, R, D), S1=S+1.
+vollstaendigedist(K,G):- #sum{ D ,T, S : wegkosten(K, D, T, S)}= G, klasse(K).
+#minimize{G,K:vollstaendigedist(K,G)}.
+
+
+wegkostenLehrer(L, D, T, S):- allokation(K, R1, F1, T, S1, L1), allokation(K, R, F, T, S, L), dist(R1, R, D), S1=S+1.
+vollstaendigedistLehrer(L,G):- #sum{ D ,T, S : wegkosten(K, D, T, S)}= G, lehrer(L).
+#minimize{G,L:vollstaendigedistLehrer(L,G)}.
+
+
+%:- allokation(K1, R, F1, T, S, L), allokation(K2, R, F2, T, S, L), K1 != K2, lehrer(L,F).
 %:- invalid(_).
 
-%wegkosten(K, D, T, S):- allokation(K, M, R1, F1, T, S1, L1), allokation(K, , R, F, T, S, L), dist(R1, R, D), S1=S+1, stunde(S1), klasse(K,M), lehrer(L,F).
-%vollstaendigedist(K,G):- #sum{ D ,T, S : wegkosten(K, D, T, S)}= G, klasse(K).
-%:- allokation(K, M, R1, F1, T, S, L1), allokation(K, M, R, F, T, S, L), F!=F1, lehrer(L,F), klasse(K,M).
-%:- allokation(K, M, R1, F1, T, S, L1), allokation(K, M, R, F, T, S, L), R1!=R, lehrer(L,F), klasse(K,M).
-%:- allokation(K, M, R1, F1, T, S, L1), allokation(K, M, R, F, T, S, L), L1!=L, lehrer(L,F), klasse(K,M).
-%#minimize{G,K:vollstaendigedist(K,G)}.
+:- allokation(K, R1, F1, T, S, L1), allokation(K, R, F, T, S, L), F!=F1, lehrer(L,F), klasse(K).
+:- allokation(K, R1, F1, T, S, L1), allokation(K, R, F, T, S, L), R1!=R, lehrer(L,F), klasse(K).
+:- allokation(K, R1, F1, T, S, L1), allokation(K, R, F, T, S, L), L1!=L, lehrer(L,F), klasse(K).
+
+
 
 %#maximize{D,(K, M, T, S1) : klasse_zeitpunkt_raum(K, M, T, S1, R1), klasse_zeitpunkt_raum(K, M, T, S2, R2), dist(R1, R2, D), S2=S1+1, stunde(S2)}. 
 
@@ -221,10 +238,6 @@ lehrer(kraut, spa).
 lehrer(super_lehrer, lern).
 lehrer(super_lehrer, profil).
 
-%wegkostenlehrer(L,D,T,S):- allokation(K,M,R1,F1,T,S1,L1), allokation(K,M,R,F,T,S,L), dist(R1,R,D), S1=S+1, stunde(S1), klasse(K,M), lehrer(L,F).
-%vollstaendigedistlehrer(L,V):- #sum{D,T,S: wegkostenlehrer(L,D,T,S)}=V ,lehrer(L,F).
-%#minimize{V,L: vollstaendigedistlehrer(L,V)}.
-
 % ein block ist 2 stunden vom gleichen fach hintereinnander, vielleicht so: 
  %block(F, S, S1, T, K, M, L):- allokation(K, M, R, F, T, S ,L), allokation(K, M, R, F, T, S1, L), S1=S+1, S1!=6.
 
@@ -243,4 +256,3 @@ lehrer(super_lehrer, profil).
 %#show vollstaendigedist/2.
 %#show wegkosten/4.
 %show fehlender_lehrer/1.
-#show falsch/2.
