@@ -44,20 +44,21 @@ raum(46,1,1,4).
 raum(47,2,1,4).
 raum(48,3,1,4).
 
-% wie ist das wenn man die Etage nicht wechselt? es werden dennoch +4 distanz hinzugefügt 
-%dist(R,R1,D):- Y-Y1=J, X-X1=J1, J2= 4*(Z-Z1), J2+J1+J=D, Y!=Y1, X!=X1, Z>Z1, raum(R,X,Y,Z), raum(R1,X1,Y1,Z1).
-%dist(R,R1,D):- Y-Y1=J, X-X1=J1, J2= 4*(Z1-Z), J2+J1+J=D, Y!=Y1, X!=X1, Z<Z1, raum(R,X,Y,Z), raum(R1,X1,Y1,Z1).
-%dist(R,R1,D):- X-X1=J,Y-Y1=J, J2= 4*(Z1-Z), J2+J1+J=D, Y!=Y1, X!=X1, Z<Z1, raum(R,X,Y,Z), raum(R1,X1,Y,Z).
-dist_x(R,R1,DX):- X-X1=DX, X>X1, raum(R,X,Y,Z), raum(R1,X1,Y,Z).
-dist_x(R,R1,DX):- X1-X=DX, X<X1, raum(R,X,Y,Z), raum(R1,X1,Y,Z).
-dist_y(R,R1,DY):- Y-Y1=DY, Y>Y1, raum(R,X,Y,Z), raum(R1,X,Y1,Z).
-dist_y(R,R1,DY):- Y1-Y=DY, Y<Y1, raum(R,X,Y,Z), raum(R1,X,Y1,Z).
-dist_z(R,R1,DZ):- Z-Z1=DZ, Z>Z1, raum(R,X,Y,Z), raum(R1,X,Y,Z1).
-dist_z(R,R1,DZ):- Z1-Z=DZ, Z<Z1, raum(R,X,Y,Z), raum(R1,X,Y,Z1).
-dist(R,R1,D):- D=DX+DY+DZ*4, dist_x(R,R1,DX), dist_y(R,R1,DY), dist_z(R,R1,DZ).
-%dist(R,R1,D):- D=DY+ DZ*4, dist_z(R,R1,DZ), dist_y(R,R1,DY).
-dist(R,R,0) :- raum(R,X,Y,Z).
-dist(X,Y,Z) :- dist(Y,X,Z).
+dist_x(R,R1,DX):- X-X1=DX, X>=X1, raum(R,X,_,_), raum(R1,X1,_,_).
+dist_x(R,R1,DX):- X1-X=DX, X<X1, raum(R,X,_,_), raum(R1,X1,_,_).
+
+dist_y(R,R1,DY):- Y-Y1=DY, Y>=Y1, raum(R,_,Y,_), raum(R1,_,Y1,_).
+dist_y(R,R1,DY):- Y1-Y=DY, Y<Y1, raum(R,_,Y,_), raum(R1,_,Y1,_).
+
+dist_z(R,R1,DZ):- Z-Z1=DZ, Z>=Z1, raum(R,_,_,Z), raum(R1,_,_,Z1).
+dist_z(R,R1,DZ):- Z1-Z=DZ, Z<Z1, raum(R,_,_,Z), raum(R1,_,_,Z1).
+
+dist(R,R1,D):- D=DY+DX+DZ*4, dist_z(R,R1,DZ), dist_y(R,R1,DY), dist_x(R,R1,DX).
+
+dist_x(R,R1,X) :- dist_x(R,R1,X).
+dist_y(R,R1,Y) :- dist_y(R,R1,Y).
+dist_z(R,R1,Z) :- dist_z(R,R1,Z).
+dist(R,R1,D) :- dist(R,R1,D).
 
 %klasse(8,a). klasse(8,b). klasse(8,c). klasse(8,d). klasse(8,e). klasse(8,f).
 %klasse(9,a). klasse(9,b). klasse(9,c). klasse(9,d). klasse(9,e).
