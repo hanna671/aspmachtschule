@@ -1,6 +1,6 @@
 [
 {   "program_folder": "logic-programs/aspforschool",
-    "timeout": 10,
+    "timeout": 20,
     "max_nr_models": 10,
     "show_model": true,
     "show_dataframes": true,
