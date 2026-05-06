@@ -1,3 +1,75 @@
+
+lehrer(ammstein_bahmann, ge).
+lehrer(ammstein_bahmann, mu).
+lehrer(bergmann, de).
+lehrer(bergmann, ku).
+lehrer(birnbaum, spa).
+lehrer(birnbaum, geo).
+lehrer(brewer, mu).
+lehrer(brewer, eng).
+lehrer(brueckner, eng).
+lehrer(brueckner, spa).
+lehrer(croy, ku).
+lehrer(croy, eth).
+lehrer(dreyer, info).
+lehrer(dreyer, ma).
+lehrer(dessel, eng).
+lehrer(endesfelder, ph).
+lehrer(endesfelder, ma).
+lehrer(erbe, reli).
+lehrer(ferme, ku).
+lehrer(ferme, eng).
+lehrer(forsbohm, ph).
+lehrer(forsbohm, info).
+lehrer(frey, de).
+lehrer(frick, fr).
+lehrer(frick, eng).
+lehrer(geyer, ch).
+lehrer(hentschel, de).
+lehrer(hentschel, ge).
+lehrer(hergert, info).
+lehrer(hergert, ma).
+lehrer(herzog, fr).
+lehrer(herzog, la).
+lehrer(herzog, geo).
+lehrer(jacob, sp).
+lehrer(jacob, grw).
+lehrer(thiele, grw).
+lehrer(thiele, ge).
+lehrer(just, ge).
+lehrer(just, de).
+lehrer(kalauch, eth).
+lehrer(kalauch, sp).
+lehrer(ketzler, de).
+lehrer(ketzler, grw).
+lehrer(keyn, ph).
+lehrer(keyn, ma).
+lehrer(klaffenbach, geo).
+lehrer(klaffenbach, eng).
+lehrer(klinger, fr).
+lehrer(klinger, ch).
+lehrer(kraeker, ph).
+lehrer(kraeker, ma).
+lehrer(kraut, ch).
+lehrer(kraut, spa).
+lehrer(kuehn, grw).
+lehrer(kuehn, eng).
+lehrer(schmidt, fr).
+lehrer(schmidt, sp).
+lehrer(thiesen, ge).
+lehrer(thiesen, la).
+lehrer(meinicke, bio).
+lehrer(meinicke, ma).
+lehrer(petzold, de).
+lehrer(petzold, eth).
+lehrer(rehm, bio).
+lehrer(rehm, eng).
+lehrer(welde, reli).
+lehrer(kraut, ch).
+lehrer(kraut, spa).
+lehrer(super_lehrer, lern).
+lehrer(super_lehrer, profil).
+
 % 1. Etage
 raum(1,0,0,0).
 raum(2,1,0,0).
@@ -108,7 +180,6 @@ klasse(101). klasse(102).% klasse(103). klasse(104).
 
 fach(bio;info;ku;eng;geo;sp;grw;ge;de;ma;ch;ph;la;fr;spa;mu;eth;lern;profil).
 
-
 %lehrplan(K,M,F,_), klasse(K), fach(F).
 lehrplan(K,ku,1):- klasse(K).
 lehrplan(K,eng,3):- klasse(K).
@@ -120,87 +191,85 @@ lehrplan(K,ph,2):- klasse(K).
 lehrplan(K,ma,4):- klasse(K).
 lehrplan(K,eth,2):- klasse(K).
 
-lehrplan(81,bio,1):- klasse(K).
-lehrplan(82,bio,1):- klasse(K).
-lehrplan(83,bio,1):- klasse(K).
-lehrplan(84,bio,1):- klasse(K).
-lehrplan(85,bio,1):- klasse(K).
-lehrplan(86,bio,1):- klasse(K).
+lehrplan(81,bio,1).
+lehrplan(82,bio,1).
+lehrplan(83,bio,1).
+lehrplan(84,bio,1).
+lehrplan(85,bio,1).
+lehrplan(86,bio,1).
 
-lehrplan(91,bio,2):- klasse(K).
-lehrplan(92,bio,2):- klasse(K).
-lehrplan(93,bio,2):- klasse(K).
-lehrplan(94,bio,2):- klasse(K).
-lehrplan(95,bio,2):- klasse(K).
+lehrplan(91,bio,2).
+lehrplan(92,bio,2).
+lehrplan(93,bio,2).
+lehrplan(94,bio,2).
+lehrplan(95,bio,2).
 
-lehrplan(101,bio,2):- klasse(K).
-lehrplan(102,bio,2):- klasse(K).
-lehrplan(103,bio,2):- klasse(K).
-lehrplan(104,bio,2):- klasse(K).
-
-
-lehrplan(81,geo,1):- klasse(K).
-lehrplan(82,geo,1):- klasse(K).
-lehrplan(83,geo,1):- klasse(K).
-lehrplan(84,geo,1):- klasse(K).
-lehrplan(85,geo,1):- klasse(K).
-lehrplan(86,geo,1):- klasse(K).
-
-lehrplan(91,geo,1):- klasse(K).
-lehrplan(92,geo,1):- klasse(K).
-lehrplan(93,geo,1):- klasse(K).
-lehrplan(94,geo,1):- klasse(K).
-lehrplan(95,geo,1):- klasse(K).
-
-lehrplan(101,geo,2):- klasse(K).
-lehrplan(102,geo,2):- klasse(K).
-lehrplan(103,geo,2):- klasse(K).
-lehrplan(104,geo,2):- klasse(K).
-
-lehrplan(81,grw,1):- klasse(K).
-lehrplan(82,grw,1):- klasse(K).
-lehrplan(83,grw,1):- klasse(K).
-lehrplan(84,grw,1):- klasse(K).
-lehrplan(85,grw,1):- klasse(K).
-lehrplan(86,grw,1):- klasse(K).
-
-lehrplan(91,grw,2):- klasse(K).
-lehrplan(92,grw,2):- klasse(K).
-lehrplan(93,grw,2):- klasse(K).
-lehrplan(94,grw,2):- klasse(K).
-lehrplan(95,grw,2):- klasse(K).
-
-lehrplan(101,grw,2):- klasse(K).
-lehrplan(102,grw,2):- klasse(K).
-lehrplan(103,grw,2):- klasse(K).
-lehrplan(104,grw,2):- klasse(K).
-
-lehrplan(81,de,4):- klasse(K).
-lehrplan(82,de,4):- klasse(K).
-lehrplan(83,de,4):- klasse(K).
-lehrplan(84,de,4):- klasse(K).
-lehrplan(85,de,4):- klasse(K).
-lehrplan(86,de,4):- klasse(K).
-
-lehrplan(91,de,3):- klasse(K).
-lehrplan(92,de,3):- klasse(K).
-lehrplan(93,de,3):- klasse(K).
-lehrplan(94,de,3):- klasse(K).
-lehrplan(95,de,3):- klasse(K).
-
-lehrplan(101,de,4):- klasse(K).
-lehrplan(102,de,4):- klasse(K).
-lehrplan(103,de,4):- klasse(K).
-lehrplan(104,de,4):- klasse(K).
-
-lehrplan(81,lern,1):- klasse(K).
-lehrplan(82,lern,1):- klasse(K).
-lehrplan(83,lern,1):- klasse(K).
-lehrplan(84,lern,1):- klasse(K).
-lehrplan(85,lern,1):- klasse(K).
-lehrplan(86,lern,1):- klasse(K).
+lehrplan(101,bio,2).
+lehrplan(102,bio,2).
+lehrplan(103,bio,2).
+lehrplan(104,bio,2).
 
 
+lehrplan(81,geo,1).
+lehrplan(82,geo,1).
+lehrplan(83,geo,1).
+lehrplan(84,geo,1).
+lehrplan(85,geo,1).
+lehrplan(86,geo,1).
+
+lehrplan(91,geo,1).
+lehrplan(92,geo,1).
+lehrplan(93,geo,1).
+lehrplan(94,geo,1).
+lehrplan(95,geo,1).
+
+lehrplan(101,geo,2).
+lehrplan(102,geo,2).
+lehrplan(103,geo,2).
+lehrplan(104,geo,2).
+
+lehrplan(81,grw,1).
+lehrplan(82,grw,1).
+lehrplan(83,grw,1).
+lehrplan(84,grw,1).
+lehrplan(85,grw,1).
+lehrplan(86,grw,1).
+
+lehrplan(91,grw,2).
+lehrplan(92,grw,2).
+lehrplan(93,grw,2).
+lehrplan(94,grw,2).
+lehrplan(95,grw,2).
+
+lehrplan(101,grw,2).
+lehrplan(102,grw,2).
+lehrplan(103,grw,2).
+lehrplan(104,grw,2).
+
+lehrplan(81,de,4).
+lehrplan(82,de,4).
+lehrplan(83,de,4).
+lehrplan(84,de,4).
+lehrplan(85,de,4).
+lehrplan(86,de,4).
+
+lehrplan(91,de,3).
+lehrplan(92,de,3).
+lehrplan(93,de,3).
+lehrplan(94,de,3).
+lehrplan(95,de,3).
+
+lehrplan(101,de,4).
+lehrplan(102,de,4).
+lehrplan(103,de,4).
+lehrplan(104,de,4).
+
+lehrplan(81,lern,1).
+lehrplan(82,lern,1).
+lehrplan(83,lern,1).
+lehrplan(84,lern,1).
+lehrplan(85,lern,1).
+lehrplan(86,lern,1).
 
 lehrplan(81,la,3).
 lehrplan(82,fr,3).
@@ -229,19 +298,25 @@ tag(do).
 tag(fr).
 stunde(1..6). 
 woche(X,Y):- tag(X),stunde(Y).
-fehlender_lehrer(F):- lehrplan(_,F,_), not fehlender_lehrer_helfer(F).
-fehlender_lehrer_helfer(F):- lehrer(L,F).
+%fehlender_lehrer(F):- lehrplan(_,F,_), not fehlender_lehrer_helfer(F).
+%fehlender_lehrer_helfer(F):- lehrer(L,F).
 
+#show invalid/1.
 
-% Grounding dauert ziemlich lange:
-% K: klasse, M: Gruppe in Klasse, R: Raum, F: Fach, T: Tag, S:Stunde, L: Lehrer
-
-lehrplanX(K,F,X) :- lehrplan(K,F,X), klasse(K).
+% choice rules
 1{allokation(K,R,F,T,S,L):lehrer(L,F), raum_fach(R,F), woche(T,S)}1:- lehrplan(K, F, X), X=1.
 2{allokation(K,R,F,T,S,L):lehrer(L,F), raum_fach(R,F), woche(T,S)}2:- lehrplan(K, F, X), X=2.
 %3{allokation(K,R,F,T,S,L):lehrer(L,F), raum_fach(R,F), woche(T,S)}3:- lehrplan(K, F, X), X=3.
 %4{allokation(K,R,F,T,S,L):lehrer(L,F), raum_fach(R,F), woche(T,S)}4:- lehrplan(K, F, X), X=4.
 %X{allokation(K,R,F,T,S,L):lehrer(L,F), raum_fach(R,F), woche(T,S)}X:- lehrplan(K, F, X).
+
+% integrity constraints
+:- allokation(K1, M1, R, F1, T, S, L), allokation(K2, M, R, F2, T, S, L), K1 != K2, lehrer(L,F).
+:- allokation(K, R1, F1, T, S, L1), allokation(K, R, F, T, S, L), F!=F1, lehrer(L,F), klasse(K).
+:- allokation(K, R1, F1, T, S, L1), allokation(K, R, F, T, S, L), R1!=R, lehrer(L,F), klasse(K).
+:- allokation(K, R1, F1, T, S, L1), allokation(K, R, F, T, S, L), L1!=L, lehrer(L,F), klasse(K).
+
+
 wegkosten(K, D, T, S):- allokation(K, R1, F1, T, S1, L1), allokation(K, R, F, T, S, L), dist(R1, R, D), S1=S+1.
 vollstaendigedist(K,G):- #sum{ D ,T, S : wegkosten(K, D, T, S)}= G, klasse(K).
 #minimize{G,K:vollstaendigedist(K,G)}.
@@ -251,103 +326,21 @@ wegkostenLehrer(L, D, T, S):- allokation(K, R1, F1, T, S1, L1), allokation(K, R,
 vollstaendigedistLehrer(L,G):- #sum{ D ,T, S : wegkosten(K, D, T, S)}= G, lehrer(L).
 #minimize{G,L:vollstaendigedistLehrer(L,G)}.
 
-
-%:- allokation(K1, M1, R, F1, T, S, L), allokation(K2, M, R, F2, T, S, L), K1 != K2, lehrer(L,F).
-%:- invalid(_).
-
-%:- allokation(K, R1, F1, T, S, L1), allokation(K, R, F, T, S, L), F!=F1, lehrer(L,F), klasse(K).
-%:- allokation(K, R1, F1, T, S, L1), allokation(K, R, F, T, S, L), R1!=R, lehrer(L,F), klasse(K).
-%:- allokation(K, R1, F1, T, S, L1), allokation(K, R, F, T, S, L), L1!=L, lehrer(L,F), klasse(K).
-
-
-
-
 %#maximize{D,(K, M, T, S1) : klasse_zeitpunkt_raum(K, M, T, S1, R1), klasse_zeitpunkt_raum(K, M, T, S2, R2), dist(R1, R2, D), S2=S1+1, stunde(S2)}. 
 
 
-lehrer(ammstein_bahmann, ge).
-lehrer(ammstein_bahmann, mu).
-lehrer(bergmann, de).
-lehrer(bergmann, ku).
-lehrer(birnbaum, spa).
-lehrer(birnbaum, geo).
-lehrer(brewer, mu).
-lehrer(brewer, eng).
-lehrer(brueckner, eng).
-lehrer(brueckner, spa).
-lehrer(croy, ku).
-lehrer(croy, eth).
-lehrer(dreyer, info).
-lehrer(dreyer, ma).
-lehrer(dessel, eng).
-lehrer(endesfelder, ph).
-lehrer(endesfelder, ma).
-lehrer(erbe, reli).
-lehrer(ferme, ku).
-lehrer(ferme, eng).
-lehrer(forsbohm, ph).
-lehrer(forsbohm, info).
-lehrer(frey, de).
-lehrer(frick, fr).
-lehrer(frick, eng).
-lehrer(geyer, ch).
-lehrer(hentschel, de).
-lehrer(hentschel, ge).
-lehrer(hergert, info).
-lehrer(hergert, ma).
-lehrer(herzog, fr).
-lehrer(herzog, la).
-lehrer(herzog, geo).
-lehrer(jacob, sp).
-lehrer(jacob, grw).
-lehrer(thiele, grw).
-lehrer(thiele, ge).
-lehrer(just, ge).
-lehrer(just, de).
-lehrer(kalauch, eth).
-lehrer(kalauch, sp).
-lehrer(ketzler, de).
-lehrer(ketzler, grw).
-lehrer(keyn, ph).
-lehrer(keyn, ma).
-lehrer(klaffenbach, geo).
-lehrer(klaffenbach, eng).
-lehrer(klinger, fr).
-lehrer(klinger, ch).
-lehrer(kraeker, ph).
-lehrer(kraeker, ma).
-lehrer(kraut, ch).
-lehrer(kraut, spa).
-lehrer(kuehn, grw).
-lehrer(kuehn, eng).
-lehrer(schmidt, fr).
-lehrer(schmidt, sp).
-lehrer(thiesen, ge).
-lehrer(thiesen, la).
-lehrer(meinicke, bio).
-lehrer(meinicke, ma).
-lehrer(petzold, de).
-lehrer(petzold, eth).
-lehrer(rehm, bio).
-lehrer(rehm, eng).
-lehrer(welde, reli).
-lehrer(kraut, ch).
-lehrer(kraut, spa).
-lehrer(super_lehrer, lern).
-lehrer(super_lehrer, profil).
-
 % ein block ist 2 stunden vom gleichen fach hintereinnander, vielleicht so: 
- %block(F, S, S1, T, K, M, L):- allokation(K, M, R, F, T, S ,L), allokation(K, M, R, F, T, S1, L), S1=S+1, S1!=6.
+block(F, S, S1, T, K, M, L):- allokation(K, M, R, F, T, S ,L), allokation(K, M, R, F, T, S1, L), S1=S+1, S1!=6.
 
 %vielleicht noch summe von blöcken bilden,oder vielleicht zählen?: 
-%sumblock(B):- #sum{S, F, S1, T, K, L: block(F, S, S1, T, K, L)}=B.
-%#maximize{B: sumblock(B)}.
+sumblock(B):- #sum{S, F, S1, T, K, L: block(F, S, S1, T, K, L)}=B.
+#maximize{B: sumblock(B)}.
 
 %nur maximal 2mal das gleiche fach
-%:-block(F, S, S1, T, K, M, L), block(F, S1, S2, T, K, L), S+2=S1+1=S2.
+:-block(F, S, S1, T, K, M, L), block(F, S1, S2, T, K, L), S+2=S1+1=S2.
 
 %homeoffice:
-%:- lehrer(L, F), #count{ T, S : allokation(K, M, R, F, T, S, L) } > 4.
+:- lehrer(L, F), #count{ T, S : allokation(K, M, R, F, T, S, L) } > 4.
 
 
 %#show allokation/5.
