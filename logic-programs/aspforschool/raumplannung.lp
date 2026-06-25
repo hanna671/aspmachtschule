@@ -306,7 +306,7 @@ woche(X,Y):- tag(X),stunde(Y).
 % choice rules
 1{allokation(K,R,F,T,S,L):lehrer(L,F), raum_fach(R,F), woche(T,S)}1:- lehrplan(K, F, X), X=1.
 2{allokation(K,R,F,T,S,L):lehrer(L,F), raum_fach(R,F), woche(T,S)}2:- lehrplan(K, F, X), X=2.
-%3{allokation(K,R,F,T,S,L):lehrer(L,F), raum_fach(R,F), woche(T,S)}3:- lehrplan(K, F, X), X=3.
+3{allokation(K,R,F,T,S,L):lehrer(L,F), raum_fach(R,F), woche(T,S)}3:- lehrplan(K, F, X), X=3.
 %4{allokation(K,R,F,T,S,L):lehrer(L,F), raum_fach(R,F), woche(T,S)}4:- lehrplan(K, F, X), X=4.
 %X{allokation(K,R,F,T,S,L):lehrer(L,F), raum_fach(R,F), woche(T,S)}X:- lehrplan(K, F, X).
 
