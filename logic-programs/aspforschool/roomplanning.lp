@@ -143,35 +143,35 @@ room_subject(100, sp).
 room_subject(200, sp).
 room_subject(300, sp).
 
-room_subject(N, eng):- room(N,_,_,_), N!=4, N!=8, N!=18, N!=17, N!=4, N!=33, N!=32, N!=4, N!=100, N!=200, N!=300.
-room_subject(N, grw):- room(N,_,_,_), N!=4, N!=8, N!=18, N!=17, N!=4, N!=33, N!=32, N!=4, N!=100, N!=200, N!=300.
-room_subject(N, ge):- room(N,_,_,_), N!=4, N!=8, N!=18, N!=17, N!=4, N!=33, N!=32, N!=4, N!=100, N!=200, N!=300.
-room_subject(N, de):- room(N,_,_,_), N!=4, N!=8, N!=18, N!=17, N!=4, N!=33, N!=32, N!=4, N!=100, N!=200, N!=300.
-room_subject(N, ma):- room(N,_,_,_), N!=4, N!=8, N!=18, N!=17, N!=4, N!=33, N!=32, N!=4, N!=100, N!=200, N!=300.
-room_subject(N, la):- room(N,_,_,_), N!=4, N!=8, N!=18, N!=17, N!=4, N!=33, N!=32, N!=4, N!=100, N!=200, N!=300.
-room_subject(N, fr):- room(N,_,_,_), N!=4, N!=8, N!=18, N!=17, N!=4, N!=33, N!=32, N!=4, N!=100, N!=200, N!=300.
-room_subject(N, spa):- room(N,_,_,_), N!=4, N!=8, N!=18, N!=17, N!=4, N!=33, N!=32, N!=4, N!=100, N!=200, N!=300.
-room_subject(N, religion):- room(N,_,_,_), N!=4, N!=8, N!=18, N!=17, N!=4, N!=33, N!=32, N!=4, N!=100, N!=200, N!=300.
-room_subject(N, eth):- room(N,_,_,_), N!=4, N!=8, N!=18, N!=17, N!=4, N!=33, N!=32, N!=4, N!=100, N!=200, N!=300.
-room_subject(N, lern):- room(N,_,_,_), N!=4, N!=8, N!=18, N!=17, N!=4, N!=33, N!=32, N!=4, N!=100, N!=200, N!=300.
-room_subject(N, profil):- room(N,_,_,_), N!=4, N!=8, N!=18, N!=17, N!=4, N!=33, N!=32, N!=4, N!=100, N!=200, N!=300.
+% Define specialized rooms once
+specialized_room(1;2;3;4;8;17;18;32;33;34;38;42;43;100;200;300).
+
+% General subjects can use any non-specialized room
+room_subject(N, eng):- room(N,_,_,_), not specialized_room(N).
+room_subject(N, grw):- room(N,_,_,_), not specialized_room(N).
+room_subject(N, ge):- room(N,_,_,_), not specialized_room(N).
+room_subject(N, de):- room(N,_,_,_), not specialized_room(N).
+room_subject(N, ma):- room(N,_,_,_), not specialized_room(N).
+room_subject(N, la):- room(N,_,_,_), not specialized_room(N).
+room_subject(N, fr):- room(N,_,_,_), not specialized_room(N).
+room_subject(N, spa):- room(N,_,_,_), not specialized_room(N).
+room_subject(N, religion):- room(N,_,_,_), not specialized_room(N).
+room_subject(N, eth):- room(N,_,_,_), not specialized_room(N).
+room_subject(N, lern):- room(N,_,_,_), not specialized_room(N).
+room_subject(N, profil):- room(N,_,_,_), not specialized_room(N).
 
 
-dist_x(R,R1,DX):- X-X1=DX, X>=X1, room(R,X,_,_), room(R1,X1,_,_).
-dist_x(R,R1,DX):- X1-X=DX, X<X1, room(R,X,_,_), room(R1,X1,_,_).
+% Simplified distance calculation (absolute value using conditional)
+dist_x(R,R1,DX):- room(R,X,_,_), room(R1,X1,_,_), X>=X1, DX=X-X1.
+dist_x(R,R1,DX):- room(R,X,_,_), room(R1,X1,_,_), X<X1, DX=X1-X.
 
-dist_y(R,R1,DY):- Y-Y1=DY, Y>=Y1, room(R,_,Y,_), room(R1,_,Y1,_).
-dist_y(R,R1,DY):- Y1-Y=DY, Y<Y1, room(R,_,Y,_), room(R1,_,Y1,_).
+dist_y(R,R1,DY):- room(R,_,Y,_), room(R1,_,Y1,_), Y>=Y1, DY=Y-Y1.
+dist_y(R,R1,DY):- room(R,_,Y,_), room(R1,_,Y1,_), Y<Y1, DY=Y1-Y.
 
-dist_z(R,R1,DZ):- Z-Z1=DZ, Z>=Z1, room(R,_,_,Z), room(R1,_,_,Z1).
-dist_z(R,R1,DZ):- Z1-Z=DZ, Z<Z1, room(R,_,_,Z), room(R1,_,_,Z1).
+dist_z(R,R1,DZ):- room(R,_,_,Z), room(R1,_,_,Z1), Z>=Z1, DZ=Z-Z1.
+dist_z(R,R1,DZ):- room(R,_,_,Z), room(R1,_,_,Z1), Z<Z1, DZ=Z1-Z.
 
-dist(R,R1,D):- D=DY+DX+DZ*4, dist_z(R,R1,DZ), dist_y(R,R1,DY), dist_x(R,R1,DX).
-
-dist_x(R,R1,X) :- dist_x(R,R1,X).
-dist_y(R,R1,Y) :- dist_y(R,R1,Y).
-dist_z(R,R1,Z) :- dist_z(R,R1,Z).
-dist(R,R1,D) :- dist(R,R1,D).
+dist(R,R1,D):- dist_x(R,R1,DX), dist_y(R,R1,DY), dist_z(R,R1,DZ), D=DX+DY+DZ*4.
 
 %class(81). class(82). class(83). class(84). class(85). class(86).
 %class(91). class(92). class(93). class(94). class(95).
@@ -303,10 +303,15 @@ week(X,Y):- day(X),hour(Y).
 
 #show invalid/1.
 
-% choice rules
-1{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}1:- curriculum(K, F, X), X=1.
-2{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}2:- curriculum(K, F, X), X=2.
-3{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}3:- curriculum(K, F, X), X=3.
+% Pre-compute valid time slots for each class-subject combination
+valid_slot(K,F,T,S) :- curriculum(K,F,_), week(T,S).
+
+% Pre-compute valid teacher-room-subject combinations
+valid_allocation_base(L,R,F) :- teacher(L,F), room_subject(R,F).
+
+1{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}3:- curriculum(K, F, X), X=1.
+2{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}3:- curriculum(K, F, X), X=2.
+%3{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}3:- curriculum(K, F, X), X=3.
 %4{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}4:- curriculum(K, F, X), X=4.
 %X{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}X:- curriculum(K, F, X).
 
@@ -340,7 +345,7 @@ sum_blocks(B):- #sum{S, F, S1, T, K, L: block(F, S, S1, T, K, L)}=B.
 :-block(F, S, S1, T, K, M, L), block(F, S1, S2, T, K, L), S+2=S1+1=S2.
 
 %homeoffice:
-:- teacher(L, F), #count{ T, S : allocation(K, M, R, F, T, S, L) } > 4.
+%:- teacher(L, F), #count{ T, S : allocation(K, M, R, F, T, S, L) } > 4.
 
 
 %#show allocation/5.

@@ -1,0 +1,1 @@
+ start with python main.py -j config.json
