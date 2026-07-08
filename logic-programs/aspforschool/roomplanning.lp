@@ -303,14 +303,14 @@ week(X,Y):- day(X),hour(Y).
 
 #show invalid/1.
 
-1{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}3:- curriculum(K, F, X), X=1.
+1{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}1:- curriculum(K, F, X), X=1.
 %2{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}2:- curriculum(K, F, X), X=2.
 %3{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}3:- curriculum(K, F, X), X=3.
 %4{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}4:- curriculum(K, F, X), X=4.
 %X{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}X:- curriculum(K, F, X).
 
 % integrity constraints
-:- allocation(K1, M1, R, F1, T, S, L), allocation(K2, M, R, F2, T, S, L), K1 != K2, teacher(L,F).
+:- allocation(K1, _, _, T, S, L), allocation(K2, _, _, T, S, L), K1 != K2.
 :- allocation(K, R1, F1, T, S, L1), allocation(K, R, F, T, S, L), F!=F1, teacher(L,F), class(K).
 :- allocation(K, R1, F1, T, S, L1), allocation(K, R, F, T, S, L), R1!=R, teacher(L,F), class(K).
 :- allocation(K, R1, F1, T, S, L1), allocation(K, R, F, T, S, L), L1!=L, teacher(L,F), class(K).
