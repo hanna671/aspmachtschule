@@ -303,14 +303,8 @@ week(X,Y):- day(X),hour(Y).
 
 #show invalid/1.
 
-% Pre-compute valid time slots for each class-subject combination
-valid_slot(K,F,T,S) :- curriculum(K,F,_), week(T,S).
-
-% Pre-compute valid teacher-room-subject combinations
-valid_allocation_base(L,R,F) :- teacher(L,F), room_subject(R,F).
-
 1{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}3:- curriculum(K, F, X), X=1.
-2{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}3:- curriculum(K, F, X), X=2.
+%2{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}2:- curriculum(K, F, X), X=2.
 %3{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}3:- curriculum(K, F, X), X=3.
 %4{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}4:- curriculum(K, F, X), X=4.
 %X{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}X:- curriculum(K, F, X).
@@ -331,17 +325,16 @@ travel_cost_teacher(L, D, T, S):- allocation(K, R1, F1, T, S1, L1), allocation(K
 total_distance_teacher(L,G):- #sum{ D ,T, S : travel_cost(K, D, T, S)}= G, teacher(L).
 #minimize{G,L:total_distance_teacher(L,G)}.
 
-%#maximize{D,(K, M, T, S1) : class_time_room(K, M, T, S1, R1), class_time_room(K, M, T, S2, R2), dist(R1, R2, D), S2=S1+1, hour(S2)}.
+#maximize{D,(K, M, T, S1) : class_time_room(K, M, T, S1, R1), class_time_room(K, M, T, S2, R2), dist(R1, R2, D), S2=S1+1, hour(S2)}.
 
+% one block is 2 hour from the same subject
+block(F, S, S1, T, K, M, L):- allocation(K, M, R, F, T, S ,L), allocation(K, M, R, F, T, S1, L), S1=S+1, S!=6.
 
-% ein block ist 2 stunden vom gleichen fach hintereinnander, vielleicht so:
-block(F, S, S1, T, K, M, L):- allocation(K, M, R, F, T, S ,L), allocation(K, M, R, F, T, S1, L), S1=S+1, S1!=6.
-
-%vielleicht noch summe von blöcken bilden,oder vielleicht zählen?:
+%take sums of blocks or count them
 sum_blocks(B):- #sum{S, F, S1, T, K, L: block(F, S, S1, T, K, L)}=B.
 #maximize{B: sum_blocks(B)}.
 
-%nur maximal 2mal das gleiche fach
+%but maximally two times the same subjects
 :-block(F, S, S1, T, K, M, L), block(F, S1, S2, T, K, L), S+2=S1+1=S2.
 
 %homeoffice:

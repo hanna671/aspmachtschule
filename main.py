@@ -5,9 +5,7 @@ import gc
 import clingo
 from clingo.control import Control
 from clingo.backend import Observer
-import matplotlib
 #matplotlib.use('Agg') 
-import matplotlib.pyplot as plt
 import pandas as pd
 from datetime import datetime
 import threading
@@ -80,23 +78,23 @@ def compute_costs(modelIndex, all_data_frames):
     cprint("calculating cost ...")
     cost = {}
 
-    wegkosten_df = all_data_frames["wegkosten"]
-    wegkosten_df['dist'] = wegkosten_df['dist'].apply(extract_clingo_number)
-    cost["wegkosten"] = sum(wegkosten_df['dist'])
+    total_distance_df = all_data_frames["total_distance"]
+    total_distance_df['dist'] = total_distance_df['dist'].apply(extract_clingo_number)
+    cost["total_distance"] = sum(total_distance_df['dist'])
 
-    wegkostenlehrer_df = all_data_frames["wegkostenlehrer"]
-    wegkostenlehrer_df['dist'] = wegkostenlehrer_df['dist'].apply(extract_clingo_number)
-    cost["wegkostenlehrer"] = sum(wegkostenlehrer_df['dist'])
+    travel_cost_teacher_df = all_data_frames["travel_cost_teacher"]
+    travel_cost_teacher_df['dist'] = travel_cost_teacher_df['dist'].apply(extract_clingo_number)
+    cost["travel_cost_teacher"] = sum(travel_cost_teacher_df['dist'])
 
     sumblock_df = all_data_frames["sumblock"]
-    sumblock_df['anzahl'] = sumblock_df['anzahl'].apply(extract_clingo_number)
-    cost["sumblock"] = sum(sumblock_df['anzahl'])
+    sumblock_df['nr'] = sumblock_df['nr'].apply(extract_clingo_number)
+    cost["sumblock"] = sum(sumblock_df['nr'])
 
     cost['model_id'] = modelIndex
     
     costs.append(cost)
 
-    cost_df = pd.DataFrame(data=costs, columns=["model_id","wegkosten","wegkostenlehrer","sumblock"])
+    cost_df = pd.DataFrame(data=costs, columns=["model_id","total_distance","travel_cost_teacher","sumblock"])
     cost_df.set_index("model_id", inplace=False)
     cost_df.to_csv(f"{outputfolder}/costs.csv")
 
@@ -120,7 +118,7 @@ def solve_clingo(programs, max_models=0, timeout=None):
     print(f'--models={max_models}')
 
     ctl = clingo.Control(
-        ['--warn=no-atom-undefined', f'--models={max_models}', "--opt-mode=optN", "--parallel-mode=12"])
+        ['--warn=no-atom-undefined', f'--models={max_models}', "--parallel-mode=12"])
     print(f'Configuration Keys: {ctl.configuration.solve.keys}')
     ctl.register_observer(myobs)
     myobs.start()#
@@ -192,18 +190,24 @@ def on_model(m: clingo.Model):
 
         cprint(f"Start processing Model {foundModelIndex} ... ")
         cprint("creating template atoms ...")
-        for modelAtomTemplate in modelAtomTemplates:
-            showModelAtoms(path_symbols, modelAtomTemplate['name'], modelAtomTemplate['filter'], modelAtomTemplate['columns'],
-                        foundModelIndex)
-    
-        #thread = threading.Thread(target=processModel, args=(m, analyzedModelIndex,), daemon=False)
-        #thread.start()
-        processModel(m, foundModelIndex)
+        try:
+            for modelAtomTemplate in modelAtomTemplates:
+                showModelAtoms(path_symbols, modelAtomTemplate['name'], modelAtomTemplate['filter'], modelAtomTemplate['columns'],
+                            foundModelIndex)
+
+            #thread = threading.Thread(target=processModel, args=(m, analyzedModelIndex,), daemon=False)
+            #thread.start()
+            processModel(m, foundModelIndex)
+        except Exception as e:
+            print(f"ERROR processing model {foundModelIndex}: {e}")
+            import traceback
+            traceback.print_exc()
+            raise
 
         if m.optimality_proven:
             print(
                 f"=== Optimal model [{foundModelIndex}] found after {str(round((time.process_time() - start_time_solving) / 60, 2))} minutes of solving (Optimality proven: {m.optimality_proven}) === ")
-            
+
             if exit_after_optimal_found:
                 print(str(m))
                 if compute_costs_var == True:
