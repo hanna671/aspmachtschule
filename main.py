@@ -44,7 +44,7 @@ modelAtomTemplates = [
     {'name':'allocation', 'filter':lambda s: s.name=='allocation', 'columns':['class','room','subject', 'day', 'timeslot','teacher']},
     {'name':'sameRoomSameProject', 'filter':lambda s: s.name=='sameRoomSameProject', 'columns':['name1','name2']},
     {'name':'dist', 'filter':lambda s: s.name=='dist', 'columns':['start','ende','dist']},
-    {'name':'total_distance', 'filter':lambda s: s.name== 'total_distance', 'columns':['class', 'dist','day', 'timeslot']},
+    {'name':'total_distance', 'filter':lambda s: s.name== 'total_distance', 'columns':['class', 'dist']},
     {'name':'invalid', 'filter':lambda s: s.name=='invalid', 'columns':['name']},
     {'name':'travel_cost_teacher', 'filter':lambda s: s.name== 'travel_cost_teacher', 'columns':['teacher', 'dist','day', 'timeslot']},
     {'name':'sumblock', 'filter':lambda s: s.name=='sumblock', 'columns':['nr']}
