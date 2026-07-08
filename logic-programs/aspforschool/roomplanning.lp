@@ -316,9 +316,9 @@ week(X,Y):- day(X),hour(Y).
 :- allocation(K, R1, F1, T, S, L1), allocation(K, R, F, T, S, L), L1!=L, teacher(L,F), class(K).
 
 
-%travel_cost(K, D, T, S):- allocation(K, R1, F1, T, S1, L1), allocation(K, R, F, T, S, L), dist(R1, R, D), S1=S+1.
-%total_distance(K,G):- #sum{ D ,T, S : travel_cost(K, D, T, S)}= G, class(K).
-%#minimize{G,K:total_distance(K,G)}.
+travel_cost(K, D, T, S):- allocation(K, R1, F1, T, S1, L1), allocation(K, R, F, T, S, L), dist(R1, R, D), S1=S+1.
+total_distance(K,G):- #sum{ D ,T, S : travel_cost(K, D, T, S)}= G, class(K).
+#minimize{G,K:total_distance(K,G)}.
 
 
 %travel_cost_teacher(L, D, T, S):- allocation(K, R1, F1, T, S1, L1), allocation(K, R, F, T, S, L), dist(R1, R, D), S1=S+1.
