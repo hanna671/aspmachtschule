@@ -118,7 +118,7 @@ def solve_clingo(programs, max_models=0, timeout=None):
     print(f'--models={max_models}')
 
     ctl = clingo.Control(
-        ['--warn=no-atom-undefined', f'--models={max_models}', "--parallel-mode=12"])
+        ['--warn=no-atom-undefined', f'--models={max_models}', "--opt-mode=optN"])
     print(f'Configuration Keys: {ctl.configuration.solve.keys}')
     ctl.register_observer(myobs)
     myobs.start()#
