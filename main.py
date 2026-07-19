@@ -42,7 +42,7 @@ modelAtomTemplates = [
     {'name':'movePerson','filter':lambda s: s.name=='movePerson', 'columns':['name']},
     {'name':'currentRoom','filter':lambda s: s.name=='currentRoom', 'columns':['name','room']},
     {'name':'allocation', 'filter':lambda s: s.name=='allocation', 'columns':['class','room','subject', 'day', 'timeslot','teacher']},
-    {'name':'seventhHour', 'filter':lambda s: s.name=='seventhHour', 'columns':['class','room','subject', 'day', 'timeslot','teacher']},
+    {'name':'latehHours', 'filter':lambda s: s.name=='latehHours', 'columns':['class','room','subject', 'day', 'timeslot','teacher']},
     {'name':'sameRoomSameProject', 'filter':lambda s: s.name=='sameRoomSameProject', 'columns':['name1','name2']},
     {'name':'dist', 'filter':lambda s: s.name=='dist', 'columns':['start','ende','dist']},
     {'name':'total_distance', 'filter':lambda s: s.name== 'total_distance', 'columns':['class', 'dist']},

@@ -174,12 +174,11 @@ dist(R,R1,D):- dist_x(R,R1,DX), dist_y(R,R1,DY), dist_z(R,R1,DZ), D=DX+DY+DZ*4.
 
 class(81). class(82). class(83). class(84). class(85). class(86).
 class(91). class(92). class(93). class(94). class(95).
-class(101). class(102).% class(103). class(104).
+class(101). class(102). class(103). class(104).
 
 
 subject(bio;info;ku;eng;geo;sp;grw;ge;de;ma;ch;ph;la;fr;spa;mu;eth;lern;profil).
 
-%curriculum(K,M,F,_), class(K), subject(F).
 curriculum(K,ku,1):- class(K).
 curriculum(K,eng,3):- class(K).
 curriculum(K,profil,2):- class(K).
@@ -295,7 +294,7 @@ day(di).
 day(mi).
 day(do).
 day(fr).
-hour(1..7).
+hour(1..8).
 week(X,Y):- day(X),hour(Y).
 %missing_teacher(F):- curriculum(_,F,_), not missing_teacher_helper(F).
 %missing_teacher_helper(F):- teacher(L,F).
@@ -322,10 +321,9 @@ roomAllocByTeacher(L,R,T,S) :- allocation(K,R,F,T,S,L).
 #minimize{D,L,R1,T,S1:roomAllocByTeacher(L,R1,T,S1),roomAllocByTeacher(L,R,T,S), dist(R1, R, D), S1=S+1}.
 
 % we cannot find a curriculum where the time slots are only until 6, thus extend it to 7 and then minimize.
-#minimize{1, K,R,F,T,L:allocation(K,R,F,T,S,L), S=7}.
+#minimize{1@10000, K,R,F,T,L:latehHours(K,R,F,T,S,L)}.
 
-seventhHour(K,R,F,T,S,L) :-allocation(K,R,F,T,S,L), S=7.
-
+latehHours(K,R,F,T,S,L) :-allocation(K,R,F,T,S,L), S>=7.
 
 % one block is 2 hour from the same subject
 block(F, S, S1, T, K, M, L):- allocation(K, M, R, F, T, S ,L), allocation(K, M, R, F, T, S1, L), S1=S+1, S!=6.
