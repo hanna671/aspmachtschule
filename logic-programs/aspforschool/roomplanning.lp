@@ -1,4 +1,3 @@
-
 teacher(ammstein_bahmann, ge).
 teacher(ammstein_bahmann, mu).
 teacher(bergmann, de).
@@ -173,8 +172,8 @@ dist_z(R,R1,DZ):- room(R,_,_,Z), room(R1,_,_,Z1), Z<Z1, DZ=Z1-Z.
 
 dist(R,R1,D):- dist_x(R,R1,DX), dist_y(R,R1,DY), dist_z(R,R1,DZ), D=DX+DY+DZ*4.
 
-%class(81). class(82). class(83). class(84). class(85). class(86).
-%class(91). class(92). class(93). class(94). class(95).
+class(81). class(82). class(83). class(84). class(85). class(86).
+class(91). class(92). class(93). class(94). class(95).
 class(101). class(102).% class(103). class(104).
 
 
@@ -288,44 +287,45 @@ curriculum(102,fr,3).
 curriculum(103,fr,3).
 curriculum(104,spa,3).
 
-invalid(K):- curriculum(K,_,_),not class(K).
-invalid(Y):- curriculum(_,Y,_) ,not subject(Y).
+invalidClass(K):- curriculum(K,_,_),not class(K).
+invalidSubject(Y):- curriculum(_,Y,_) ,not subject(Y).
 %day(mo;di;mi;do;fr).
 day(mo).
 day(di).
 day(mi).
 day(do).
 day(fr).
-hour(1..6).
+hour(1..7).
 week(X,Y):- day(X),hour(Y).
 %missing_teacher(F):- curriculum(_,F,_), not missing_teacher_helper(F).
 %missing_teacher_helper(F):- teacher(L,F).
 
-#show invalid/1.
-
-1{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}1:- curriculum(K, F, X), X=1.
-2{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}2:- curriculum(K, F, X), X=2.
-%3{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}3:- curriculum(K, F, X), X=3.
-%4{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}4:- curriculum(K, F, X), X=4.
-%X{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S)}X:- curriculum(K, F, X).
+% initial encoding: K=Class, R=Room, F=Subject, T=Day, S=Hour, L=Teacher
+X{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S) }X:- curriculum(K, F, X).
 
 % integrity constraints
+% one teacher cannot teach two different classes at the same time.
 :- allocation(K1, _, _, T, S, L), allocation(K2, _, _, T, S, L), K1 != K2.
-:- allocation(K, R1, F1, T, S, L1), allocation(K, R, F, T, S, L), F!=F1, teacher(L,F), class(K).
-:- allocation(K, R1, F1, T, S, L1), allocation(K, R, F, T, S, L), R1!=R, teacher(L,F), class(K).
-:- allocation(K, R1, F1, T, S, L1), allocation(K, R, F, T, S, L), L1!=L, teacher(L,F), class(K).
+% one class cannot be taught two different subjects at the same time.
+:- allocation(K, _, F1, T, S, _), allocation(K, _, F, T, S, _), F!=F1.
+% one class cannot be taught in two different rooms at the same time.
+:- allocation(K, R1, _, T, S, _), allocation(K, R, _, T, S, _), R!=R1.
+% one room cannot be allocated to two different classes at the same time.
+:- allocation(K1, R, _, T, S, _), allocation(K, R, _, T, S, _), K!=K1.
+% one class cannot be taught by two different teachers at the same time.
+:- allocation(K, _, _, T, S, L1), allocation(K, _, _, T, S, L), L!=L1, L<L1.
 
 
-travel_cost(K, D, T, S):- allocation(K, R1, F1, T, S1, L1), allocation(K, R, F, T, S, L), dist(R1, R, D), S1=S+1.
-total_distance(K,G):- #sum{ D ,T, S : travel_cost(K, D, T, S)}= G, class(K).
-#minimize{G,K:total_distance(K,G)}.
+roomAllocByClass(K,R,T,S) :- allocation(K,R,F,T,S,L).
+roomAllocByTeacher(L,R,T,S) :- allocation(K,R,F,T,S,L).
+#minimize{D,K,R1,T,S1:roomAllocByClass(K,R1,T,S1),roomAllocByClass(K,R,T,S), dist(R1, R, D), S1=S+1}.
+#minimize{D,L,R1,T,S1:roomAllocByTeacher(L,R1,T,S1),roomAllocByTeacher(L,R,T,S), dist(R1, R, D), S1=S+1}.
 
+% we cannot find a curriculum where the time slots are only until 6, thus extend it to 7 and then minimize.
+#minimize{1, K,R,F,T,L:allocation(K,R,F,T,S,L), S=7}.
 
-travel_cost_teacher(L, D, T, S):- allocation(K, R1, F1, T, S1, L1), allocation(K, R, F, T, S, L), dist(R1, R, D), S1=S+1.
-total_distance_teacher(L,G):- #sum{ D ,T, S : travel_cost(K, D, T, S)}= G, teacher(L).
-#minimize{G,L:total_distance_teacher(L,G)}.
+seventhHour(K,R,F,T,S,L) :-allocation(K,R,F,T,S,L), S=7.
 
-#maximize{D,(K, M, T, S1) : class_time_room(K, M, T, S1, R1), class_time_room(K, M, T, S2, R2), dist(R1, R2, D), S2=S1+1, hour(S2)}.
 
 % one block is 2 hour from the same subject
 block(F, S, S1, T, K, M, L):- allocation(K, M, R, F, T, S ,L), allocation(K, M, R, F, T, S1, L), S1=S+1, S!=6.
@@ -338,12 +338,16 @@ sum_blocks(B):- #sum{S, F, S1, T, K, L: block(F, S, S1, T, K, L)}=B.
 :-block(F, S, S1, T, K, M, L), block(F, S1, S2, T, K, L), S+2=S1+1=S2.
 
 %homeoffice:
-%:- teacher(L, F), #count{ T, S : allocation(K, M, R, F, T, S, L) } > 4.
+:- teacher(L, F), #count{ T: allocation(K, M, R, F, T, S, L) } > 4.
 
 
-%#show allocation/5.
-%#show total_distance/2.
-%#show travel_cost/4.
-%show missing_teacher/1.
 #show allocation/7.
+
+
+%Expensive
+%travel_cost_teacher(L, D, T, S):- allocation(K, R1, F1, T, S1, L1), allocation(K, R, F, T, S, L), dist(R1, R, D), S1=S+1.
+%total_distance_teacher(L,G):- #sum{ D ,T, S : travel_cost(K, D, T, S)}= G, teacher(L).
+%#minimize{G,L:total_distance_teacher(L,G)}.
+
+%:- curriculum(K, F, X), X!=#count{S:allocation(K,R,F,T,S,L)}.
 
