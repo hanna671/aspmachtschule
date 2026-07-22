@@ -294,17 +294,23 @@ day(di).
 day(mi).
 day(do).
 day(fr).
-hour(1..8).
+hour(1..7).
 week(X,Y):- day(X),hour(Y).
 %missing_teacher(F):- curriculum(_,F,_), not missing_teacher_helper(F).
 %missing_teacher_helper(F):- teacher(L,F).
 
 % initial encoding: K=Class, R=Room, F=Subject, T=Day, S=Hour, L=Teacher
-X{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S) }X:- curriculum(K, F, X).
+%X{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S) }X:- curriculum(K, F, X).
+1{allocateRoom(K,R,F):room_subject(R,F) }:- curriculum(K, F, X).
+X{allocateTime(K,F,T,S):week(T,S)}X:- curriculum(K, F, X).
+1{allocateTeacher(K,F,L):teacher(L,F)}1:- curriculum(K, F, X).
 
-% integrity constraints
+allocation(K,R,F,T,S,L) :- allocateRoom(K,R,F),allocateTime(K,F,T,S),allocateTeacher(K,F,L).
+
+
 % one teacher cannot teach two different classes at the same time.
-:- allocation(K1, _, _, T, S, L), allocation(K2, _, _, T, S, L), K1 != K2.
+%0{allocateTeacher(K,F,L):allocateTime(K,F,T,S)}1 :- teacher(L,F), class(K). 
+:- allocation(K, _, _, T, S, L), allocation(K, _, _, T, S, L1), L!=L1.
 % one class cannot be taught two different subjects at the same time.
 :- allocation(K, _, F1, T, S, _), allocation(K, _, F, T, S, _), F!=F1.
 % one class cannot be taught in two different rooms at the same time.
@@ -313,6 +319,20 @@ X{allocation(K,R,F,T,S,L):teacher(L,F), room_subject(R,F), week(T,S) }X:- curric
 :- allocation(K1, R, _, T, S, _), allocation(K, R, _, T, S, _), K!=K1.
 % one class cannot be taught by two different teachers at the same time.
 :- allocation(K, _, _, T, S, L1), allocation(K, _, _, T, S, L), L!=L1, L<L1.
+
+
+% integrity constraints
+%0{teach(K1,T,S,L):allocation(K, _, _, T, S, L)}1 :- teacher(L,_). %allocation(K, _, _, T, S, L).
+
+%:- allocation(K1, _, _, T, S, L), allocation(K2, _, _, T, S, L), K1 != K2.
+% one class cannot be taught two different subjects at the same time.
+%:- allocation(K, _, F1, T, S, _), allocation(K, _, F, T, S, _), F!=F1.
+% one class cannot be taught in two different rooms at the same time.
+%:- allocation(K, R1, _, T, S, _), allocation(K, R, _, T, S, _), R!=R1.
+% one room cannot be allocated to two different classes at the same time.
+%:- allocation(K1, R, _, T, S, _), allocation(K, R, _, T, S, _), K!=K1.
+% one class cannot be taught by two different teachers at the same time.
+%:- allocation(K, _, _, T, S, L1), allocation(K, _, _, T, S, L), L!=L1, L<L1.
 
 
 roomAllocByClass(K,R,T,S) :- allocation(K,R,F,T,S,L).
